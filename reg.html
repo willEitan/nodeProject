@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registery</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="val.js"></script>
+</head>
+<body>
+	<h2>Register for Weather Updates</h2>
+	<h4>Create an Account</h4>
+	<form id="regForm" method="post" action="/registerNewUser">
+		<label>Full Name: <p id="errName"></p></label>
+		<input type="text" id="name" name="name" onblur="valName()"><br>
+		<label>Email: <p id="errEmail"></p></label>
+		<input type="text" id="email" name="email" onblur="valEmail()"><br>
+		<label>Password: <p id="errPass"></p></label>
+		<input type="password" name="password"><br>
+		<label>City Name: <p id="errZIP"></p></label>
+		<input type="text" name="city"><br>
+		<input type="submit" name="submit">
+	</form>
+</body>
+</html>
