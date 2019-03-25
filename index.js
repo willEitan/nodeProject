@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const exphbs = require ('express-handlebars')
 const path = require('path')
 const con = require("./controllers/controller.js")
-const PORT = process.env.PORT || 5000
+//const PORT = process.env.PORT || 5000
 
 //vars
 var app = express()
@@ -31,5 +31,7 @@ app.get('/ranNum', con.ranNum)
 app.post('/registerNewUser', con.register)
 
 //listening
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-
+//app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.listen(process.env.PORT || 8000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
