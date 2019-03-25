@@ -5,6 +5,55 @@ const pool = new Pool({connectionString: connectionString})
 const request = require('request')
 const nodemailer = require('nodemailer')
 
+sendEmail = (email, data, callback) => {
+	console.log("Attempting to send email to %s", email)
+	const output = `
+		<p>The temperature in ${data.city} is: ${data.temperature}</p>`
+	console.log("Email content is: %s", output)
+	// create reusable transporter object using the default SMTP transport
+	let transporter = nodemailer.createTransport({
+	    host: "weatherregistry.epizy.com",
+	    port: 587,
+	    secure: false, // true for 465, false for other ports
+	    auth: {
+	      user: 'epiz_23662981', // generated ethereal user
+	      pass: 'tbSq1JpUiNe' // generated ethereal password
+	    },
+	    tls:{
+	    	rejectUnauthorized:false
+	    }
+	  });
+
+	  // setup email data with unicode symbols
+	  let mailOptions = {
+	    from: '"Weather Report Registry" <weatherregistry@epizy.com>', // sender address
+	    to: email, // list of receivers
+	    subject: "Weather Report for " + data.city, // Subject line
+	    text: "Your weather Report", // plain text body
+	    html: output // html body
+	  };
+
+	  // send mail with defined transport object
+	  //let info = await transporter.sendMail(mailOptions)
+	  transporter.sendMail(mailOptions, (error, info) => {
+	  	if (error){
+	  		console.log(error)
+	  		callback(error, null)
+	  	} else {
+	  		console.log("Message sent: %s", info.messageId);
+	  		console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+	  		let message = "Email has been sent"
+			callback(null, message)
+	  	}
+	  })
+
+
+	  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+	  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+	let message = "Email has been sent"
+	callback(null, message)
+}
+
 getWeather = (city, callback) => {
 	var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + WAPIkey
 	
@@ -77,6 +126,7 @@ ranNum = (callback) => {
 }
 
 module.exports = {
+	sendEmail : sendEmail,
 	getWeather : getWeather,
 	addSubsciberToDB : addSubsciberToDB,
 	findUser : findUser,

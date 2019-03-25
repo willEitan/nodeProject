@@ -4,11 +4,18 @@ register = (req, res) =>{
 	console.log("registering user")
 	console.log(req.body)
 	var city = req.body.city
-	model.getWeather(city, function(err, results) {
+	var email = req.body.email
+	model.getWeather(city, function(err, weather_data) {
 		if (err) {
 			throw err
 		} else {
-			res.json(results)
+			model.sendEmail(email, weather_data, function(err, results) {
+				if (err){
+					throw err
+				} else {
+					res.json(results)
+				}
+			})
 		}
 	})
 	
