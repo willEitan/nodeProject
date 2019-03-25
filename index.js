@@ -1,11 +1,12 @@
+//consts 
 const express = require('express')
 const bodyParser = require('body-parser')
 const exphbs = require ('express-handlebars')
 const path = require('path')
 const con = require("./controllers/controller.js")
-
 const PORT = process.env.PORT || 5000
 
+//vars
 var app = express()
 
 //set handlebars engine
