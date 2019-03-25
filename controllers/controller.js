@@ -1,10 +1,15 @@
 var model = require("../models/model.js")
 
 register = (req, res) =>{
-	//console.log("registering user")
+	console.log("registering user")
 	console.log(req.body)
-	model.getWeather(req.body.city, function(weather_data) {
-		res.json(weather_data)
+	var city = req.body.city
+	model.getWeather(city, function(err, results) {
+		if (err) {
+			throw err
+		} else {
+			res.json(results)
+		}
 	})
 	
 	/*const output = `
@@ -15,10 +20,14 @@ register = (req, res) =>{
 }
 
 ranNum = (req, res) => {
-	//generate a random 5-digit number
-	var myNum = Math.floor(Math.random()*100000+1)
-	//console.log(myNum)
-	res.json(myNum)
+	model.ranNum(function(err, results){
+		if (err) {
+			throw err
+		} else {
+			res.json(results)
+		}
+	})
+	
 }
 
 getWeather = (req, res) => {
