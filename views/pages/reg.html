@@ -9,14 +9,18 @@
 	<script type="text/javascript" src="val.js"></script>
 </head>
 <body>
-	<form id="regForm" method="post">
+	<script>console.log(__dirname)</script>
+	<h2>Register for Weather Updates</h2>
+	<h4>Create an Account</h4>
+	<form id="regForm" method="post" action="/registerNewUser">
 		<label>Full Name: <p id="errName"></p></label>
-		<input type="text" id="name" name="name" onblur="valName()">
+		<input type="text" id="name" name="name" onblur="valName()"><br>
 		<label>Email: <p id="errEmail"></p></label>
-		<input type="text" id="email" name="email" onblur="valEmail()">
+		<input type="text" id="email" name="email" onblur="valEmail()"><br>
 		<label>Password: <p id="errPass"></p></label>
-		<input type="password" name="password">
+		<input type="password" name="password"><br>
 		<input type="submit" name="submit">
 	</form>
+	<a href="/toLogin">I already have an account</a>
 </body>
 </html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login for Weather Updater</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="val.js"></script>
+</head>
+<body>
+	<h3>Login to update your preferences</h3>
+	<form id="regForm" method="post" action="/login">
+		<label>Email: <p id="errEmail"></p></label>
+		<input type="text" id="email" name="email" onblur="valEmail()"><br>
+		<label>Password: <p id="errPass"></p></label>
+		<input type="password" name="password"><br>
+		<input type="submit" name="login">
+	</form>
+	<a href="/">I don't have an account</a>
+</body>
+</html>

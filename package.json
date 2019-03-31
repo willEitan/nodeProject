@@ -12,12 +12,17 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
     "ejs": "^2.5.6",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.1",
     "nodemailer": "^5.1.1",
     "nodemon": "^1.18.10",
-    "pg": "^7.9.0"
+    "pg": "^7.9.0",
+    "session-file-store": "^1.2.0",
+    "xoauth2": "^1.2.0"
   },
   "devDependencies": {
     "request": "^2.88.0",

@@ -4,32 +4,44 @@ const { Pool } = require("pg")
 const pool = new Pool({connectionString: connectionString})
 const request = require('request')
 const nodemailer = require('nodemailer')
+const xoauth2 = require('xoauth2')
 
-sendEmail = (email, data, callback) => {
-	console.log("Attempting to send email to %s", email)
-	const output = `
-		<p>The temperature in ${data.city} is: ${data.temperature}</p>`
-	console.log("Email content is: %s", output)
+sendEmail = (user, email, data, callback) => {
+	console.log("Attempting to send email to %s with email %s", user, email)
+	console.log("Using data: " + data)
+	
+	var output = ''
+	var subject = ''
+	if (data.city){
+		output = `<h3>${user},</h3><em>In ${data.city} \"${data.description}\" </em><p>With a high of ${data.temp_hign}°F and a low of ${data.temp_low}°F, the temperature in ${data.city} is: ${data.temperature}°F</p>`
+		subject = 'Weather Report for ' + data.city
+	} else {
+		output = `<h3>${user},</h3><p>Verify your Weather Registry email with this 5-digit authentication code: </p>
+					<b>${data.code}</b>
+					<p>Code will expire in 30 minutes.</p>`
+		subject = 'Thanks for signing up! Stay informed'
+	}
+
 	// create reusable transporter object using the default SMTP transport
 	let transporter = nodemailer.createTransport({
-	    host: "weatherregistry.epizy.com",
-	    port: 587,
-	    secure: false, // true for 465, false for other ports
-	    auth: {
-	      user: 'epiz_23662981', // generated ethereal user
-	      pass: 'tbSq1JpUiNe' // generated ethereal password
-	    },
-	    tls:{
-	    	rejectUnauthorized:false
-	    }
-	  });
-
+		host: 'smtp.gmail.com',
+		port: 465,
+		secure: true,
+		auth: {
+			type: 'OAuth2',
+			user: 'yourWeatherUpdater@gmail.com',
+			clientId: '755109834042-47puvnearcpj85kklmg0oiib1u37t4u7.apps.googleusercontent.com',
+			clientSecret: 'hQf79BuuzFCKanoflfIvRWl8',
+			refreshToken: '1/rqyTBNJ5wAxofHaO5HdZU0bp4UY22KCTTKT_aQewxAo',
+			accessToken: 'ya29.GlvdBrxEKEr_WIInQp_fr6y3Mh-KcDT22Vnmttb9OOhUoxEV161RjTpJryHGbEb8u6uYcREFTHX7pOh11nWyZsGy0lS35t4LRiXj1bfxQ9a6YgBEFwmQ2__Nka7v'
+		}
+	})
 	  // setup email data with unicode symbols
 	  let mailOptions = {
-	    from: '"Weather Report Registry" <weatherregistry@epizy.com>', // sender address
+	    from: "'Weather Report Registry' <yourWeatherUpdater@gmail.com>", // sender address
 	    to: email, // list of receivers
-	    subject: "Weather Report for " + data.city, // Subject line
-	    text: "Your weather Report", // plain text body
+	    subject: subject, // Subject line
+	    text: "Your Weather Report", // plain text body
 	    html: output // html body
 	  };
 
@@ -46,30 +58,30 @@ sendEmail = (email, data, callback) => {
 			callback(null, message)
 	  	}
 	  })
-
-
-	  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-	  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-	let message = "Email has been sent"
-	callback(null, message)
 }
 
 getWeather = (city, callback) => {
+	console.log("making api call for weather in %s", city)
 	var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=imperial&appid=' + WAPIkey
-	
+	console.log("using url: %s", url)
 	request(url, function(error, response, body){
-		weather_json = JSON.parse(body)
-		console.log(weather_json)
-		var weather = {
-			city : city,
-			temperature : Math.round(weather_json.main.temp),
-			temp_min : Math.round(weather_json.main.temp_min),
-			temp_max : Math.round(weather_json.main.temp_max),
-			description : weather_json.weather[0].description,
-			iocn : weather_json.weather[0].icon
+		if (error) {
+			console.log(error)
+			callback(error, null)
+		} else {
+			weather_json = JSON.parse(body)
+			console.log("parsed: " + weather_json)
+			var weather = {
+				city : city,
+				temperature : Math.round(weather_json.main.temp),
+				temp_low : Math.round(weather_json.main.temp_min),
+				temp_high : Math.round(weather_json.main.temp_max),
+				description : weather_json.weather[0].description,
+				iocn : weather_json.weather[0].icon
+			}
+			var weather_data = {weather : weather}
+			callback(null, weather_data)
 		}
-		var weather_data = {weather :weather}
-		callback(null, weather_data)
 	})
 }
 
@@ -94,7 +106,7 @@ insertUserToDB = (user, callback) => {
 }
 
 addSubsciberToDB = (name, email, password, type, callback) => {
-	console.log("registering new user " + name + " to database")
+	console.log("Inserting new user " + name + " to database")
 	
 	var sql = "INSERT INTO subscibers (subscibers_id, name, email, password, subscription_type) VALUES (nextval(sb_seq), $1, $2, $3, $4)"
 	var params = [name, email, password, type]
@@ -104,6 +116,8 @@ addSubsciberToDB = (name, email, password, type, callback) => {
 			console.log("An error occured when accessing the database")
 			consloe.log(err)
 			callback(err, null)
+		} else {
+
 		}
 	})
 }
@@ -113,11 +127,12 @@ findUser = (user, callback) => {
 	//static result
 	var results = {
 		name : "John",
+		email : "john@mail.com",
 		password : "1234",
 		city : "London"
 	}
 
-	callback(null)
+	callback(null, results)
 }
 
 ranNum = (callback) => {

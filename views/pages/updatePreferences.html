@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Update Updater</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="val.js"></script>
+</head>
+<body>
+	<form method="post" action="/updatePreferences">
+		<label>The city you want to recieve weather updates for: </label><input type="text" name="city"><br>
+		<label>How often should we email you weather updates: </label><br>
+		<select name="frequency">
+			<option>Daily</option>
+			<option>Weekly</option>
+			<option>I prefer not to be updated :'(</option>
+		</select><br>
+		<input type="submit" name="submit">
+	</form>
+</body>
+</html>
