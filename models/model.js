@@ -1,4 +1,4 @@
-const WAPIkey = 'f4cc2d8ac7fb9caec2899d69db657f61'
+const WAPIkey = ''
 const connectionString = process.env.DATABASE_URL || "postgres://projectUser:nodeCS313@localhost:5432/project_02"
 const { Pool } = require("pg")
 const pool = new Pool({connectionString: connectionString})
@@ -30,10 +30,10 @@ sendEmail = (user, email, data, callback) => {
 		auth: {
 			type: 'OAuth2',
 			user: 'yourWeatherUpdater@gmail.com',
-			clientId: '755109834042-47puvnearcpj85kklmg0oiib1u37t4u7.apps.googleusercontent.com',
-			clientSecret: 'hQf79BuuzFCKanoflfIvRWl8',
-			refreshToken: '1/rqyTBNJ5wAxofHaO5HdZU0bp4UY22KCTTKT_aQewxAo',
-			accessToken: 'ya29.GlvdBrxEKEr_WIInQp_fr6y3Mh-KcDT22Vnmttb9OOhUoxEV161RjTpJryHGbEb8u6uYcREFTHX7pOh11nWyZsGy0lS35t4LRiXj1bfxQ9a6YgBEFwmQ2__Nka7v'
+			clientId: '',
+			clientSecret: '',
+			refreshToken: '',
+			accessToken: ''
 		}
 	})
 	  // setup email data with unicode symbols
